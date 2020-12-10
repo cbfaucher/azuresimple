@@ -20,7 +20,7 @@ public class PaymentInitiate {
     @FunctionName("paymentInitiate")
     @EventHubOutput(
             name = "request",
-            eventHubName = "", // blank because the value is included in the connection string
+            eventHubName = "myhub", // blank because the value is included in the connection string
             connection = "EventHubConnectionString")
     public PaymentEvent run(
             @HttpTrigger(name = "req", methods = HttpMethod.POST, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Payment> request,
