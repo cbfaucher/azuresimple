@@ -1,4 +1,4 @@
-package com.ms.wmbanking.azure.payment;
+package com.ms.wmbanking.azure.payment.model;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

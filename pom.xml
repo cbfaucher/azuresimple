@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ms.wmbanking</groupId>
@@ -29,11 +30,16 @@
 
         <functionAppRegion>eastus</functionAppRegion>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <start-class>com.ms.wmbanking.azure.payment.Application</start-class>
+        <start-class>com.ms.wmbanking.azure.payment.spring.Application</start-class>
         <spring.boot.wrapper.version>1.0.25.RELEASE</spring.boot.wrapper.version>
+        <spring-cloud-function-dependencies-version>3.0.12.RELEASE</spring-cloud-function-dependencies-version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-azure</artifactId>
@@ -68,7 +74,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-function-dependencies</artifactId>
-                <version>3.0.10.RELEASE</version>
+                <version>${spring-cloud-function-dependencies-version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
