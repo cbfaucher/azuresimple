@@ -19,14 +19,25 @@ public class PaymentInitiate {
      */
     @FunctionName("paymentInitiate")
     @EventHubOutput(
-            name = "event",
+            name = "request",
             eventHubName = "", // blank because the value is included in the connection string
             connection = "EventHubConnectionString")
     public PaymentEvent run(
             @HttpTrigger(name = "req", methods = HttpMethod.POST, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Payment> request,
             final ExecutionContext context) {
-        context.getLogger().info("Function 'paymentEvent' receiving a Payment initiation....");
+        context.getLogger().info("--> Function 'paymentEvent' receiving a Payment initiation....");
 
         return new PaymentEvent("AAAAAAA", request.getBody(), LocalDateTime.now());
+    }
+
+    @FunctionName("echo")
+    public void echoPaymentEvent(@EventHubTrigger(name = "event",
+                                                  eventHubName = "myhub", // blank because the value is included in the connection string
+                                                  cardinality = Cardinality.ONE,
+                                                  //consumerGroup = "MakeItSo",
+                                                  connection = "EventHubConnectionString") final PaymentEvent event,
+                                 final ExecutionContext context) {
+
+        context.getLogger().info("--> Got a new Event on EventHub: " + event.getPaymentId());
     }
 }
