@@ -1,5 +1,6 @@
-package com.ms.wmbanking.azure.payment;
+package com.ms.wmbanking.azure.payment.spring;
 
+import com.ms.wmbanking.azure.payment.model.Response;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ public class Application {
         System.out.println("--> Bean 'ping' created");
 
         return s -> {
-            System.out.println("--> Got a PING from " + s);
+            System.out.println("--> Got a ping from: " + s);
 
             if (isNotBlank(s)) {
                 return new Response(ACCEPTED, "Hello, " + s);

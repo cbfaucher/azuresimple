@@ -1,0 +1,38 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Functions - AzureSimple" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
+    <option name="appName" />
+    <option name="appServicePlanName" />
+    <option name="appServicePlanResourceGroup" />
+    <option name="appSettings">
+      <map>
+        <entry key="AzureWebJobsStorage" value="" />
+        <entry key="FUNCTIONS_WORKER_RUNTIME" value="java" />
+        <entry key="IsEncrypted" value="false" />
+        <entry key="MAIN_CLASS" value="com.ms.wmbanking.azure.payment.spring.Application" />
+      </map>
+    </option>
+    <option name="artifact" />
+    <option name="debugOptions" />
+    <option name="deployment" />
+    <option name="deploymentStagingDirectoryPath" />
+    <option name="funcPath" value="C:\Program Files\Microsoft\Azure Functions Core Tools\func.exe" />
+    <option name="hostJsonPath" value="C:\Users\cbfau\Development\azuresimple\src\host.json" />
+    <option name="insightsName" />
+    <option name="instrumentationKey" />
+    <option name="javaVersion" />
+    <option name="localSettingsJsonPath" />
+    <option name="moduleName" value="azuresimple" />
+    <option name="os" />
+    <option name="pricingTier" />
+    <option name="providerMap">
+      <map />
+    </option>
+    <option name="region" />
+    <option name="resourceGroup" />
+    <option name="stagingFolder" value="C:\Users\cbfau\Development\azuresimple\src\target\azure-functions\cftutorialazuresimple" />
+    <option name="subscription" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
