@@ -1,16 +1,23 @@
 package com.ms.wmbanking.azure.payment.payments;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import com.microsoft.azure.functions.ExecutionContext;
+import com.microsoft.azure.functions.HttpMethod;
+import com.microsoft.azure.functions.HttpRequestMessage;
 import com.microsoft.azure.functions.annotation.*;
-import com.microsoft.azure.functions.*;
 import com.ms.wmbanking.azure.payment.model.Payment;
 import com.ms.wmbanking.azure.payment.model.PaymentEvent;
+import lombok.val;
+import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
 
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class PaymentInitiate {
+public class PaymentInitiate extends AzureSpringBootRequestHandler<Payment, PaymentEvent> {
 
     /**
      * This function listens at endpoint "/api/PaymentInitiate". Two ways to invoke it using "curl" command in bash:
@@ -27,7 +34,14 @@ public class PaymentInitiate {
             final ExecutionContext context) {
         context.getLogger().info("--> Function 'paymentEvent' receiving a Payment initiation....");
 
-        return new PaymentEvent("AAAAAAA", request.getBody(), LocalDateTime.now());
+        val payment = request.getBody();
+        if (payment == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Payment received");
+        }
+
+        val event = handleRequest(payment, context);
+        context.getLogger().info("--> Returning Payment Event with ID: " + event.getPaymentId());
+        return event;
     }
 
     @FunctionName("echo")

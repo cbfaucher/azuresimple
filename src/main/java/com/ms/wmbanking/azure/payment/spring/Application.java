@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.function.Function;
 
@@ -14,6 +15,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @SpringBootApplication
 @Configuration
+@Import(PaymentBeans.class)
 public class Application {
 
     public static void main(String[] args) throws Exception {

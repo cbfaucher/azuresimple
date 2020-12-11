@@ -1,8 +1,20 @@
+## Proof of concept
 
+* See how to use Spring locally only to run and debug the Function code
+* JSR-303 Validation?
+* Avoid the ``HttpRequestMessage``, and use type directly?
+* Security: Authentication and Authorization
+* Continuous deployments
+* Azure Events:
+   * Event Hubs (Streams?!) - DONE
+   * Event Grid (classic pub/sub)
+   * Queues (MQ-like?)
+   * Service Bus
+   
 
-# AZURE
+## AZURE
 
-## Parameters
+### Parameters
 * RESOURCE_GROUP=`cf-tutorial`
 * EVENT_HUB_NAMESPACE=`cftutoiral`
 * EVENT_HUB_NAME=`myhub`
@@ -12,7 +24,7 @@
 * FUNCTION_APP=<value>
 * LOCATION=<value>
 
-## Useful commands
+### Useful commands
 
 * Login: ``az login``
 * EventHubs:
