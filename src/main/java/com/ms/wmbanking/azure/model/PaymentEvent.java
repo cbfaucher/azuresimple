@@ -1,7 +1,7 @@
-package com.ms.wmbanking.azure.payment.model;
+package com.ms.wmbanking.azure.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.ms.wmbanking.azure.payment.jackson.LocalDateTimeSerializer;
+import com.ms.wmbanking.azure.jackson.LocalDateTimeSerializer;
 import lombok.*;
 
 import java.time.LocalDateTime;

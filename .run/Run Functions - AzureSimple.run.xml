@@ -5,10 +5,11 @@
     <option name="appServicePlanResourceGroup" />
     <option name="appSettings">
       <map>
-        <entry key="AzureWebJobsStorage" value="" />
+        <entry key="AzureWebJobsStorage" value="DefaultEndpointsProtocol=..." />
+        <entry key="EventHubConnectionString" value="Endpoint=..." />
         <entry key="FUNCTIONS_WORKER_RUNTIME" value="java" />
         <entry key="IsEncrypted" value="false" />
-        <entry key="MAIN_CLASS" value="com.ms.wmbanking.azure.payment.spring.Application" />
+        <entry key="MAIN_CLASS" value="com.ms.wmbanking.azure.Application" />
       </map>
     </option>
     <option name="artifact" />

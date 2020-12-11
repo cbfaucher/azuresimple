@@ -1,10 +1,10 @@
-package com.ms.wmbanking.azure.payment;
+package com.ms.wmbanking.azure;
 
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import com.ms.wmbanking.azure.payment.model.Response;
+import com.ms.wmbanking.azure.model.Response;
 import lombok.val;
 import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 

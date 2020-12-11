@@ -1,10 +1,16 @@
-package com.ms.wmbanking.azure.payment.spring;
+package com.ms.wmbanking.azure;
 
-import com.ms.wmbanking.azure.payment.model.Response;
+import com.ms.wmbanking.azure.entities.PaymentEntity;
+import com.ms.wmbanking.azure.model.Response;
+import com.ms.wmbanking.azure.payment.PaymentBeans;
+import com.ms.wmbanking.azure.txnmanager.TxnManagerBeans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.function.Function;
 
@@ -14,6 +20,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @SpringBootApplication
 @Configuration
+@Import({PaymentBeans.class, TxnManagerBeans.class, PaymentEntity.class})
+@EntityScan(basePackageClasses = PaymentEntity.class)
+@EnableTransactionManagement
 public class Application {
 
     public static void main(String[] args) throws Exception {

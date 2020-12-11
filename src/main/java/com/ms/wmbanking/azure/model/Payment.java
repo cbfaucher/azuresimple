@@ -1,4 +1,4 @@
-package com.ms.wmbanking.azure.payment.model;
+package com.ms.wmbanking.azure.model;
 
 import lombok.*;
 
