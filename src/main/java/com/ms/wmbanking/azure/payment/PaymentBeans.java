@@ -1,7 +1,7 @@
-package com.ms.wmbanking.azure.payment.spring;
+package com.ms.wmbanking.azure.payment;
 
-import com.ms.wmbanking.azure.payment.model.Payment;
-import com.ms.wmbanking.azure.payment.model.PaymentEvent;
+import com.ms.wmbanking.azure.model.Payment;
+import com.ms.wmbanking.azure.model.PaymentEvent;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.val;
@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -39,5 +41,10 @@ public class PaymentBeans {
             }
             return new String(bytes);
         };
+    }
+
+    @Bean
+    public Function<String, List<PaymentEvent>> paymentList(final EntityManagerFactory entityManagerFactory) {
+        return new PaymentList(entityManagerFactory);
     }
 }

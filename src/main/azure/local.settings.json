@@ -1,10 +1,10 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol....",
+    "MAIN_CLASS": "com.ms.wmbanking.azure.Application",
+    "EventHubConnectionString": "Endpoint=...",
     "FUNCTIONS_WORKER_RUNTIME": "java",
-    "MAIN_CLASS":"com.ms.wmbanking.azure.payment.spring.Application",
-    "EventHubConnectionString": "Endpoint....",
-    "AzureWebJobsDashboard": ""
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=...",
+    "IsEncrypted": "false"
   }
 }

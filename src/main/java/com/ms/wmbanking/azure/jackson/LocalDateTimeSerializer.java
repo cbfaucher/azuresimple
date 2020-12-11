@@ -1,4 +1,4 @@
-package com.ms.wmbanking.azure.payment.jackson;
+package com.ms.wmbanking.azure.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
