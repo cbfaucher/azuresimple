@@ -1,0 +1,47 @@
+[
+  {
+    "paymentId": "HFZYDJDV",
+    "payment": {
+      "amount": 12.34000015258789,
+      "from": {
+        "ownerName": "Mom",
+        "accountNumber": "123456"
+      },
+      "to": {
+        "ownerName": "Christian",
+        "accountNumber": "987654"
+      }
+    },
+    "entryTimestamp": "2020-12-11T21:04:21.77"
+  },
+  {
+    "paymentId": "IRAHAFRQ",
+    "payment": {
+      "amount": 12.34000015258789,
+      "from": {
+        "ownerName": "Mom",
+        "accountNumber": "123456"
+      },
+      "to": {
+        "ownerName": "Christian",
+        "accountNumber": "987654"
+      }
+    },
+    "entryTimestamp": "2020-12-11T15:49:58.197"
+  },
+  {
+    "paymentId": "ZTYORAAO",
+    "payment": {
+      "amount": 12.34000015258789,
+      "from": {
+        "ownerName": "Mom",
+        "accountNumber": "123456"
+      },
+      "to": {
+        "ownerName": "Christian",
+        "accountNumber": "987654"
+      }
+    },
+    "entryTimestamp": "2020-12-11T14:46:50.207"
+  }
+]

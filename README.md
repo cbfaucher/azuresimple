@@ -13,8 +13,20 @@
    * Queues (MQ-like?)
    * Service Bus
    
+## Issues found so far
 
-## AZURE
+* *Spring support is partial and misleading*.  All good when run in unit tests or through `Application` class.  However, in real world, the Function is run through a cmd line tool call `func.exe`, and this one doesn't seem to connect to JSON Mapper found in Spring, thus yielding a different JSON result when invoking the Function in real world.
+* *Forced to return String instead of Object*.  Due to point above, we cannot rely on default JSON mapper for Functions (which is neigher Google's GSon nor Jackson).  Based on numerous examples on the web, we are forced to return a `String` from Function's method, being the already marshalled result object, instead of the result object itself.  Not cool.
+* *Spring Context loaded multiple times*.  In fact, for each Function and through tests.
+* *Spring Profiles not carried over from tests*.  Profiles not carried over from tests to Application, when running tests.  This has the bad sideffect that application's properties (for instance, DB configuration) cannot be overwritten from tests' properties (e.g. running H2 in tests instead of real database).
+* *IntelliJ Azure plugin buggy?*  Functions work fine when run from Maven plugin (`mvn azure-functions:run`) and when deployed from Maven as well to Azure Cloud.  But getting "Entity not mapped" errors when run from Intellij plugin. 
+   
+### Quick fixes
+
+* Maven's Azure plugin fails with authentication/authorization error: run `az login` from command line.
+* `local-settings.json` is **local**, as its name implies.  Configuration on Azure is done through `Configuration` section for Function App.       
+
+## AZURE 
 
 ### Common Parameters
 * RESOURCE_GROUP=`cf-tutorial`
