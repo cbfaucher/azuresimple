@@ -1,49 +1,36 @@
 package com.ms.wmbanking.azure.payment;
 
-import com.ms.wmbanking.azure.entities.EntityManagerFactoryHelper;
-import com.ms.wmbanking.azure.entities.PaymentEntity;
+import java.util.*;
+
+import com.microsoft.azure.functions.annotation.*;
+import com.microsoft.azure.functions.*;
+import com.ms.wmbanking.azure.Application;
 import com.ms.wmbanking.azure.model.PaymentEvent;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManagerFactory;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+/**
+ * Azure Functions with HTTP Trigger.
+ */
+public class PaymentList extends AzureSpringBootRequestHandler<String, List<PaymentEvent>> {
 
-@Slf4j
-@RequiredArgsConstructor
-public class PaymentList implements EntityManagerFactoryHelper,
-        Function<String, List<PaymentEvent>>,
-        Supplier<List<PaymentEvent>> {
-
-    @Getter
-    private final EntityManagerFactory entityManagerFactory;
-
-    @PostConstruct
-    public void init() {
-        log.info("--> paymentList bean created!");
+    public PaymentList() {
+        super(Application.class);
     }
 
-    @Override
-    public List<PaymentEvent> apply(String s) {
-        log.info(String.format("Chaining to apply(%s) --> get()", s));
-        return get();
-    }
+    /**
+     * This function listens at endpoint "/api/paymentList". Two ways to invoke it using "curl" command in bash:
+     * 1. curl -d "HTTP Body" {your host}/api/paymentList
+     * 2. curl {your host}/api/paymentList?name=HTTP%20Query
+     */
+    @FunctionName("paymentList")
+    public String run(
+            @HttpTrigger(name = "req", methods = HttpMethod.GET, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
+            final ExecutionContext context) {
 
-    @Override
-    public List<PaymentEvent> get() {
-        log.info("Calling HBM to fetch the list of PaymentEvent...");
-        return execute(em -> {
-            log.info("Creating HBM Query for PaymentEntity...");
-            return em.createQuery("SELECT T FROM PaymentEntity T", PaymentEntity.class)
-                     .getResultList()
-                     .stream()
-                     .map(PaymentEntity::toModel)
-                     .collect(Collectors.toList());
-        });
+        context.getLogger().info("Fetching ALL PaymentEvents...");
+        val list = handleRequest("", context);
+        context.getLogger().info(String.format("...Found %d events", list.size()));
+        return jsonMapper.toString(list);
     }
 }

@@ -45,6 +45,6 @@ public class PaymentBeans {
 
     @Bean
     public Function<String, List<PaymentEvent>> paymentList(final EntityManagerFactory entityManagerFactory) {
-        return new PaymentList(entityManagerFactory);
+        return new PaymentListImpl(entityManagerFactory);
     }
 }

@@ -1,10 +1,16 @@
 package com.ms.wmbanking.azure.jackson;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.type.CollectionLikeType;
+import com.ms.wmbanking.azure.model.PaymentEvent;
+
+import java.util.List;
 
 public interface JsonHelper {
+
+    ObjectMapper defaultObjectMapper = new JsonHelper() {}.createObjectMapper();
+
+    CollectionLikeType paymentEventListTypeRef = defaultObjectMapper.getTypeFactory().constructCollectionLikeType(List .class, PaymentEvent .class);
 
     default ObjectMapper createObjectMapper() {
         return new ObjectMapper().enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
@@ -12,6 +18,5 @@ public interface JsonHelper {
                                  .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                                  .enable(SerializationFeature.INDENT_OUTPUT)
                                  .findAndRegisterModules();
-
     }
 }
