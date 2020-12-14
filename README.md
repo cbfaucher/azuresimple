@@ -19,6 +19,10 @@
 * *Forced to return String instead of Object*.  Due to point above, we cannot rely on default JSON mapper for Functions (which is neigher Google's GSon nor Jackson).  Based on numerous examples on the web, we are forced to return a `String` from Function's method, being the already marshalled result object, instead of the result object itself.  Not cool.
 * *Spring Context loaded multiple times*.  In fact, for each Function and through tests.
 * *Spring Profiles not carried over from tests*.  Profiles not carried over from tests to Application, when running tests.  This has the bad sideffect that application's properties (for instance, DB configuration) cannot be overwritten from tests' properties (e.g. running H2 in tests instead of real database).
+* *Poor API from Spring Cloud for Azure*.  The base classes provided for Azure by Spring Cloud are poorly written: 
+   * Reloads contexts for each Function
+   * No way of setting properly profiles
+   * Profiles from testing not carried over 
 * *IntelliJ Azure plugin buggy?*  Functions work fine when run from Maven plugin (`mvn azure-functions:run`) and when deployed from Maven as well to Azure Cloud.  But getting "Entity not mapped" errors when run from Intellij plugin. 
    
 ### Quick fixes
