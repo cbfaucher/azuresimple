@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Functions - AzureSimple" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
+  <configuration default="false" name="Run Functions - Payments" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
     <option name="appName" />
     <option name="appServicePlanName" />
     <option name="appServicePlanResourceGroup" />
@@ -22,7 +22,7 @@
     <option name="instrumentationKey" />
     <option name="javaVersion" />
     <option name="localSettingsJsonPath" />
-    <option name="moduleName" value="azuresimple" />
+    <option name="moduleName" value="payment" />
     <option name="os" />
     <option name="pricingTier" />
     <option name="providerMap">
