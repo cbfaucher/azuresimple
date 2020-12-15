@@ -23,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,8 @@ class PaymentListTest implements JsonHelper, EntityManagerFactoryHelper {
     @BeforeEach
     @SneakyThrows
     void setUp() {
-        expectedPayments = defaultObjectMapper.readValue(getClass().getResource("/data/payment-list.json"), paymentEventListTypeRef);
+        expectedPayments = defaultGson.fromJson(new InputStreamReader(getClass().getResourceAsStream("/data/payment-list.json")),
+                                                paymentEventListTypeRef);
         execute(em -> {
             expectedPayments.forEach(e -> {
                 em.persist(PaymentEntity.fromModel(e));
@@ -71,13 +73,11 @@ class PaymentListTest implements JsonHelper, EntityManagerFactoryHelper {
 
         lenient().when(request.getBody()).thenReturn(Optional.empty());
 
-        val json = fct.run(request, context);
-        val actualist = (List<PaymentEvent>) defaultObjectMapper.readValue(json, paymentEventListTypeRef);
+        val actualist = fct.run(request, context);
         assertTrue(actualist.size() > 0);
 
         assertEquals(expectedPayments, actualist);
 
-        System.out.println(json);
+        System.out.println(defaultGson.toJson(actualist));
     }
-
 }

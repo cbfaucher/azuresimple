@@ -1,6 +1,6 @@
 package com.ms.wmbanking.azure.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.JsonAdapter;
 import com.ms.wmbanking.azure.jackson.LocalDateTimeSerializer;
 import lombok.*;
 
@@ -17,6 +17,6 @@ public class PaymentEvent {
 
     final private Payment payment;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonAdapter(LocalDateTimeSerializer.class)
     final private LocalDateTime entryTimestamp;
 }
