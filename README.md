@@ -1,5 +1,8 @@
 ## Proof of concept
 
+Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-java?tabs=bash%2Cconsumption
+
+* (_DONE_) Use GSON instead of Jackson --> Works natively with func.exe for Functions return values.
 * See how to use Spring locally only to run and debug the Function code
 * JSR-303 Validation?
 * Avoid the ``HttpRequestMessage``, and use type directly?
@@ -16,9 +19,11 @@
 ## Issues found so far
 
 * *Spring support is partial and misleading*.  All good when run in unit tests or through `Application` class.  However, in real world, the Function is run through a cmd line tool call `func.exe`, and this one doesn't seem to connect to JSON Mapper found in Spring, thus yielding a different JSON result when invoking the Function in real world.
-* *Forced to return String instead of Object*.  Due to point above, we cannot rely on default JSON mapper for Functions (which is neigher Google's GSon nor Jackson).  Based on numerous examples on the web, we are forced to return a `String` from Function's method, being the already marshalled result object, instead of the result object itself.  Not cool.
-* *Spring Context loaded multiple times*.  In fact, for each Function and through tests.
-* *Spring Profiles not carried over from tests*.  Profiles not carried over from tests to Application, when running tests.  This has the bad sideffect that application's properties (for instance, DB configuration) cannot be overwritten from tests' properties (e.g. running H2 in tests instead of real database).
+   * *Spring Context loaded multiple times*.  In fact, for each Function and through tests.
+   * *Spring Profiles not carried over from tests*.  Profiles not carried over from tests to Application, when running tests.  This has the bad sideffect that application's properties (for instance, DB configuration) cannot be overwritten from tests' properties (e.g. running H2 in tests instead of real database).
+* <strike>*Forced to return String instead of Object*.  Due to point above, we cannot rely on default JSON mapper for Functions (which is neigher Google's GSon nor Jackson).  Based on numerous examples on the web, we are forced to return a `String` from Function's method, being the already marshalled result object, instead of the result object itself.  Not cool.
+   * Update: seems Azure uses Google JSON: https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-java?tabs=bash%2Cconsumption#data-type-support
+   * Will switch this project to use GSON.</strike> _Switching to use GSON annotations fixed the issue_.  Jackson to be avoided at all costs.
 * *Poor API from Spring Cloud for Azure*.  The base classes provided for Azure by Spring Cloud are poorly written: 
    * Reloads contexts for each Function
    * No way of setting properly profiles
@@ -28,7 +33,15 @@
 ### Quick fixes
 
 * Maven's Azure plugin fails with authentication/authorization error: run `az login` from command line.
-* `local-settings.json` is **local**, as its name implies.  Configuration on Azure is done through `Configuration` section for Function App.       
+* `local-settings.json` is **local**, as its name implies.  Configuration on Azure is done through `Configuration` section for Function App.
+* Do *NOT* use Jackson - use Google GSon!  Important properties
+<pre>
+# New way of setting previous property
+spring.mvc.converters.preferred-json-mapper=gson
+
+# Use internally by Spring CLoud
+spring.http.converters.preferred-json-mapper=${spring.mvc.converters.preferred-json-mapper}
+</pre>    
 
 ## AZURE 
 

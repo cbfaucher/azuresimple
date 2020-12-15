@@ -1,22 +1,23 @@
 package com.ms.wmbanking.azure.jackson;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.type.CollectionLikeType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.ms.wmbanking.azure.model.PaymentEvent;
 
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface JsonHelper {
 
-    ObjectMapper defaultObjectMapper = new JsonHelper() {}.createObjectMapper();
+    Gson defaultGson = new JsonHelper() {}.createGsonMapper();
 
-    CollectionLikeType paymentEventListTypeRef = defaultObjectMapper.getTypeFactory().constructCollectionLikeType(List .class, PaymentEvent .class);
+    Type paymentEventListTypeRef = new TypeToken<List<PaymentEvent>>() {}.getType();
 
-    default ObjectMapper createObjectMapper() {
-        return new ObjectMapper().enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
-                                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                                 .enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                                 .enable(SerializationFeature.INDENT_OUTPUT)
-                                 .findAndRegisterModules();
+    default Gson createGsonMapper() {
+        return new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
+                                .setPrettyPrinting()
+                                .create();
     }
 }

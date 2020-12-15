@@ -1,6 +1,8 @@
 package com.ms.wmbanking.azure;
 
+import com.google.gson.GsonBuilder;
 import com.ms.wmbanking.azure.entities.PaymentEntity;
+import com.ms.wmbanking.azure.jackson.JsonHelper;
 import com.ms.wmbanking.azure.model.Response;
 import com.ms.wmbanking.azure.payment.PaymentBeans;
 import com.ms.wmbanking.azure.txnmanager.TxnManagerBeans;
@@ -14,6 +16,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,7 +33,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @EntityScan(basePackageClasses = PaymentEntity.class)
 @EnableTransactionManagement
 @Slf4j
-public class Application implements ApplicationListener<ContextRefreshedEvent> {
+public class Application implements ApplicationListener<ContextRefreshedEvent>, JsonHelper {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -46,6 +49,12 @@ public class Application implements ApplicationListener<ContextRefreshedEvent> {
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.info(String.format("Spring Boot Profiles: %s", String.join(", ", environment.getActiveProfiles())));
         log.info(String.format("Data Source URL is %s [Driver=%s]", dataSourceProperties.getUrl(), dataSourceProperties.determineDriverClassName()));
+    }
+
+    @Bean
+    @Primary
+    public GsonBuilder gsonBuilder() {
+        return createGsonMapper().newBuilder();
     }
 
     @Bean(name = "ping")
