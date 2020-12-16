@@ -1,8 +1,8 @@
 package com.ms.wmbanking.azure.txnmanager;
 
-import com.azure.core.util.Configuration;
+import com.azure.messaging.eventgrid.EventGridEvent;
+import com.azure.messaging.eventgrid.EventGridPublisherClient;
 import com.azure.storage.queue.QueueClient;
-import com.azure.storage.queue.QueueClientBuilder;
 import com.ms.wmbanking.azure.common.entities.PaymentEntity;
 import com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
@@ -12,22 +12,18 @@ import lombok.val;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.json.JsonMapper;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManagerFactory;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper.now;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component("txnmanagerUpdate")
 @Slf4j
-public class TxnmanagerDatabaseUpdate implements EntityManagerFactoryHelper, Consumer<PaymentEvent> {
-
-    @Autowired
-    private Environment environment;
+public class TxnmanagerMessageHandler implements EntityManagerFactoryHelper, Consumer<PaymentEvent> {
 
     @Autowired
     private JsonMapper jsonMapper;
@@ -36,19 +32,11 @@ public class TxnmanagerDatabaseUpdate implements EntityManagerFactoryHelper, Con
     @Getter
     private EntityManagerFactory entityManagerFactory;
 
+    @Autowired
     private QueueClient approvalQueue;
 
-    @PostConstruct
-    public void initialize() {
-        val connStr = environment.getProperty("QueueConnectionString");
-        if (isBlank(connStr)) {
-            throw new IllegalArgumentException("Value missing for 'QueueConnectionString'.");
-        }
-
-        approvalQueue = new QueueClientBuilder().connectionString(connStr)
-                                                .queueName("awaitingapproval")
-                                                .buildClient();
-    }
+    @Autowired
+    private EventGridPublisherClient executionEventGridClient;
 
     @Override
     public void accept(PaymentEvent paymentEvent) {
@@ -65,6 +53,11 @@ public class TxnmanagerDatabaseUpdate implements EntityManagerFactoryHelper, Con
 
             case Approved:
                 handleApproved(paymentEvent);
+                break;
+
+            case Executed:
+                handleExecuted(paymentEvent);
+                break;
 
             default:
                 log.info(String.format("Nothing to do with Payment %s [Status=%s]", paymentEvent.getPaymentId(), paymentEvent.getStatus()));
@@ -101,9 +94,8 @@ public class TxnmanagerDatabaseUpdate implements EntityManagerFactoryHelper, Con
     }
 
     private void handleApproved(PaymentEvent paymentEvent) {
-
         //  keep track of receive status
-        val entity = execute(em -> {
+        final PaymentEntity entity = execute(em -> {
             val e = PaymentEntity.fromModel(paymentEvent);
             log.info(String.format("Updating database for Payment %s with Status=%s", e.getPaymentId(), e.getStatus()));
             em.merge(e);
@@ -118,6 +110,23 @@ public class TxnmanagerDatabaseUpdate implements EntityManagerFactoryHelper, Con
             return null;
         });
 
-        //todo: send to event grid
+        val event = entity.toModel();
+        log.info(String.format("Sending Payment to Execution:\n%s", jsonMapper.toString(event)));
+        executionEventGridClient.sendEvents(Stream.of(event)
+                                                  .map(e -> new EventGridEvent(e.getPaymentId(), "Execution", jsonMapper.toString(event), "1.0"))
+                                                  .collect(Collectors.toList()));
+    }
+
+    private void handleExecuted(final PaymentEvent paymentEvent) {
+
+        //  keep track of receive status
+        execute(em -> {
+            val e = PaymentEntity.fromModel(paymentEvent);
+            log.info(String.format("Updating database for Payment %s with Status=%s", e.getPaymentId(), e.getStatus()));
+            em.merge(e);
+            return e;
+        });
+
+        log.info(String.format("Payment %s ALL DONE!", paymentEvent.getPaymentId()));
     }
 }

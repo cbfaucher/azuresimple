@@ -4,12 +4,15 @@ import com.google.gson.GsonBuilder;
 import com.ms.wmbanking.azure.common.entities.PaymentEntity;
 import com.ms.wmbanking.azure.common.jackson.JsonHelper;
 import com.ms.wmbanking.azure.common.model.Response;
+import com.ms.wmbanking.azure.common.spring.TutorialConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @Import({TxnManagerBeans.class, PaymentEntity.class})
 @EntityScan(basePackageClasses = PaymentEntity.class)
 @EnableTransactionManagement
+@EnableConfigurationProperties
+@ConfigurationPropertiesScan(basePackageClasses = TutorialConfiguration.class)
 @Slf4j
 public class Application implements ApplicationListener<ContextRefreshedEvent>, JsonHelper {
 

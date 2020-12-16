@@ -127,6 +127,10 @@
                             <name>FUNCTIONS_WORKER_RUNTIME</name>
                             <value>java</value>
                         </property>
+                        <property>
+                            <name>spring.profiles.active</name>
+                            <value>${user.name}</value>
+                        </property>
                     </appSettings>
                 </configuration>
             </plugin>

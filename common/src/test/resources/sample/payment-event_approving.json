@@ -1,0 +1,16 @@
+{
+  "paymentId": "JTIHRERJ",
+  "payment": {
+    "amount": 12.34000015258789,
+    "from": {
+      "ownerName": "Mom",
+      "accountNumber": "123456"
+    },
+    "to": {
+      "ownerName": "Christian",
+      "accountNumber": "987654"
+    }
+  },
+  "status": "Approving",
+  "entryTimestamp": "2020-12-16T15:17:21.0695869"
+}

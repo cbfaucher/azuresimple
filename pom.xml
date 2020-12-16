@@ -34,6 +34,7 @@
         <module>payment</module>
         <module>txnmanager</module>
         <module>approval</module>
+        <module>execution</module>
     </modules>
 
     <dependencies>
@@ -83,8 +84,13 @@
             <!-- Azure -->
             <dependency>
                 <groupId>com.azure</groupId>
+                <artifactId>azure-core</artifactId>
+                <version>1.11.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.azure</groupId>
                 <artifactId>azure-storage-queue</artifactId>
-                <version>12.6.0</version>
+                <version>12.7.0</version>
             </dependency>
 
             <!-- SQL DB -->

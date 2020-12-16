@@ -4,12 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ms.wmbanking</groupId>
-    <artifactId>txnmanager</artifactId>
+    <artifactId>execution</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>txn-manager</name>
+    <name>execution</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +17,7 @@
 
         <!-- customize those two properties. The functionAppName should be unique across Azure -->
         <functionResourceGroup>cf-tutorial</functionResourceGroup>
-        <functionAppName>cftxnmanager</functionAppName>
+        <functionAppName>cfexecutionmanager</functionAppName>
         <functionAppRegion>eastus</functionAppRegion>
 
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
@@ -64,25 +63,20 @@
         </dependency>
 
         <!-- Azure -->
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-core</artifactId>
-        </dependency>
+<!--
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-storage-queue</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventgrid</artifactId>
-            <version>2.0.0-beta.3</version>
-        </dependency>
+-->
 
         <!-- SQL DB -->
+<!--
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
         </dependency>
+-->
 
         <!-- Test -->
         <dependency>
