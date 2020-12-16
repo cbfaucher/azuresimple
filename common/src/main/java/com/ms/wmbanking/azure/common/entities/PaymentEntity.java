@@ -1,5 +1,6 @@
 package com.ms.wmbanking.azure.common.entities;
 
+import com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper;
 import com.ms.wmbanking.azure.common.model.Account;
 import com.ms.wmbanking.azure.common.model.Payment;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
@@ -28,11 +29,13 @@ public class PaymentEntity {
 
         return new PaymentEntity(paymentEvent.getPaymentId(),
                                  (float) paymentEvent.getPayment().getAmount(),
+                                 paymentEvent.getStatus(),
                                  Timestamp.valueOf(paymentEvent.getEntryTimestamp()),
                                  paymentEvent.getPayment().getFrom().getOwnerName(),
                                  paymentEvent.getPayment().getFrom().getAccountNumber(),
                                  paymentEvent.getPayment().getTo().getOwnerName(),
-                                 paymentEvent.getPayment().getTo().getAccountNumber());
+                                 paymentEvent.getPayment().getTo().getAccountNumber(),
+                                 EntityManagerFactoryHelper.now());
     }
 
     @Id
@@ -41,6 +44,10 @@ public class PaymentEntity {
 
     @Column(name = "AMOUNT")
     private Float amount;
+
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private PaymentEvent.Status status;
 
     @Column(name = "ENTRY_DT", columnDefinition = "datetime")
     private Timestamp entryDT;
@@ -57,11 +64,15 @@ public class PaymentEntity {
     @Column(name = "TO_ACCOUNT_NB", length = 50)
     private String toAccount;
 
+    @Column(name = "LAST_UPDATED_DT", columnDefinition = "datetime")
+    private Timestamp lastUpdated;
+
     public PaymentEvent toModel() {
         return new PaymentEvent(paymentId,
                                 new Payment(amount,
                                             new Account(fromName, fromAccount),
                                             new Account(toName, toAccount)),
+                                status,
                                 entryDT.toLocalDateTime());
     }
 }

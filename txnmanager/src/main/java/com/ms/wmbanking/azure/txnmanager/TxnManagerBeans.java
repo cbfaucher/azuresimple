@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Slf4j
-@Import(TxnmanagerUpdate.class)
+@Import(TxnmanagerDatabaseUpdate.class)
 public class TxnManagerBeans {
 
 }

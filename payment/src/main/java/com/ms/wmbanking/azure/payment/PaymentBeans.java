@@ -30,7 +30,7 @@ public class PaymentBeans {
         return p -> {
             val paymentId = paymentIdGenerator.get();
 
-            return new PaymentEvent(paymentId, p, LocalDateTime.now());
+            return new PaymentEvent(paymentId, p, PaymentEvent.Status.Initiating, LocalDateTime.now());
         };
     }
 

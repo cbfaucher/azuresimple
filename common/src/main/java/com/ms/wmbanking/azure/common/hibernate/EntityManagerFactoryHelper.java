@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
 public interface EntityManagerFactoryHelper {
@@ -46,4 +48,9 @@ public interface EntityManagerFactoryHelper {
             em.close();
         }
     }
+
+    static Timestamp now() {
+        return Timestamp.valueOf(LocalDateTime.now());
+    }
+
 }

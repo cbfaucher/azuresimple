@@ -79,6 +79,13 @@
                 <version>2.8.6</version>
             </dependency>
 
+            <!-- Azure -->
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-storage-queue</artifactId>
+                <version>12.6.0</version>
+            </dependency>
+
             <!-- SQL DB -->
             <dependency>
                 <groupId>com.microsoft.sqlserver</groupId>

@@ -13,9 +13,13 @@ import java.time.LocalDateTime;
 @ToString
 public class PaymentEvent {
 
+    public enum Status { Initiating, Approving, Executing, Done };
+
     final private String paymentId;
 
     final private Payment payment;
+
+    final private Status status;
 
     @JsonAdapter(LocalDateTimeSerializer.class)
     final private LocalDateTime entryTimestamp;

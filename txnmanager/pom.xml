@@ -63,6 +63,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Azure -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-queue</artifactId>
+        </dependency>
+
         <!-- SQL DB -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>

@@ -4,6 +4,7 @@ CREATE TABLE MMNG.PAYMENTS
 (
     PAYMENT_ID      VARCHAR(8),
     AMOUNT          FLOAT,
+    STATUS          VARCHAR(10),
     ENTRY_DT        TIMESTAMP,
 
     FROM_NAME       VARCHAR(100),
