@@ -7,13 +7,13 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
 * JSR-303 Validation?
 * Avoid the ``HttpRequestMessage``, and use type directly?
 * Security: Authentication and Authorization
-* Multi module with Maven and Functions
-* What is the Azure JSON mapper and how to configure it
+* <strike>Multi module with Maven and Functions</strike>
+* <strike>What is the Azure JSON mapper and how to configure it</strike>   -->  USE GOOGLE GSON!
 * Continuous deployments
 * Azure Events:
    * Event Hubs (Streams?!) - DONE
    * Event Grid (classic pub/sub)
-   * Queues (MQ-like?)
+   * Queues (MQ-like?) - DONE
    * Service Bus
    
 ## Issues found so far

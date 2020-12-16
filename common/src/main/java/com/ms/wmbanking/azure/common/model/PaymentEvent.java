@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 public class PaymentEvent {
 
-    public enum Status { Initiating, Approving, Executing, Done };
+    public enum Status { Initiating, Approving, Approved, Executing, Executed, Done };
 
     final private String paymentId;
 

@@ -33,6 +33,7 @@
         <module>common</module>
         <module>payment</module>
         <module>txnmanager</module>
+        <module>approval</module>
     </modules>
 
     <dependencies>
