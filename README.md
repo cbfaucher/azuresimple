@@ -11,10 +11,10 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
 * <strike>What is the Azure JSON mapper and how to configure it</strike>   -->  USE GOOGLE GSON!
 * Continuous deployments
 * Azure Events:
-   * Event Hubs (Streams?!) - DONE
-   * Event Grid (classic pub/sub)
-   * Queues (MQ-like?) - DONE
-   * Service Bus
+   * Event Hubs (Streams?!) - DONE - ALL -> TxnManager
+   * Queues (MQ-like?) - DONE - TxnManager -> Approval
+   * Event Grid (classic pub/sub) - DONE - TxnManager -> Execution
+   * Service Bus - TODO
    
 ## Issues found so far
 
