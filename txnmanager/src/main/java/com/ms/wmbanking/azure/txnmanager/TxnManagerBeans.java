@@ -46,4 +46,9 @@ public class TxnManagerBeans {
                 .credential(new AzureKeyCredential(key))
                 .buildClient();
     }
+
+    @Bean(name = {"txnmanagerInitiate","txnmanagerUpdate"})
+    public TxnmanagerMessageHandler txnmanagerMessageHandler() {
+        return new TxnmanagerMessageHandler();  //autowired
+    }
 }

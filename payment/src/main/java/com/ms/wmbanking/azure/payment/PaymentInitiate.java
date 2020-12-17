@@ -3,10 +3,7 @@ package com.ms.wmbanking.azure.payment;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.HttpRequestMessage;
-import com.microsoft.azure.functions.annotation.AuthorizationLevel;
-import com.microsoft.azure.functions.annotation.EventHubOutput;
-import com.microsoft.azure.functions.annotation.FunctionName;
-import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.microsoft.azure.functions.annotation.*;
 import com.ms.wmbanking.azure.Application;
 import com.ms.wmbanking.azure.common.model.Payment;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
@@ -30,10 +27,14 @@ public class PaymentInitiate extends AzureSpringBootRequestHandler<Payment, Paym
      * 2. curl {your host}/api/PaymentInitiate?name=HTTP%20Query
      */
     @FunctionName("paymentInitiate")
-    @EventHubOutput(
-            name = "request",
-            eventHubName = "myhub", // blank because the value is included in the connection string
-            connection = "EventHubConnectionString")
+//    @EventHubOutput(
+//            name = "request",
+//            eventHubName = "myhub", // blank because the value is included in the connection string
+//            connection = "EventHubConnectionString")
+    @ServiceBusTopicOutput(name = "SBusOutput",
+                           connection = "ServiceBusConnectionString",
+                           topicName = "newpayment",
+                           subscriptionName = "newpayments")
     public PaymentEvent run(
             @HttpTrigger(name = "req", methods = HttpMethod.POST, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Payment> request,
             final ExecutionContext context) {
@@ -45,6 +46,7 @@ public class PaymentInitiate extends AzureSpringBootRequestHandler<Payment, Paym
         }
 
         val event = handleRequest(payment, context);
+
         context.getLogger().info("--> Returning Payment Event with ID: " + event.getPaymentId());
         return event;
     }

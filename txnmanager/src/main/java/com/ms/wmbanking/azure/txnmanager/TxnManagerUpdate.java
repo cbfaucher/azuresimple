@@ -14,7 +14,8 @@ public class TxnManagerUpdate extends AzureSpringBootRequestHandler<PaymentEvent
                                      eventHubName = "myhub", // blank because the value is included in the connection string
                                      cardinality = Cardinality.ONE,
                                      //consumerGroup = "MakeItSo",
-                                     connection = "EventHubConnectionString") final PaymentEvent event,
+                                     connection = "EventHubConnectionString")
+                    final PaymentEvent event,
                     final ExecutionContext context) {
 
         context.getLogger().info("--> TxnManager to handler Payment: " + event.getPaymentId());
