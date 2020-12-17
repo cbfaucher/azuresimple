@@ -7,7 +7,7 @@ import com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper;
 import com.ms.wmbanking.azure.common.entities.PaymentEntity;
 import com.ms.wmbanking.azure.common.jackson.JsonHelper;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
-import com.ms.wmbanking.azure.testutils.DummyExecutionContext;
+import com.ms.wmbanking.azure.common.testutils.SimpleExecutionContext;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -34,11 +34,12 @@ import static org.mockito.Mockito.lenient;
 @SpringBootTest(classes = Application.class)
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ActiveProfiles("test")
+@DirtiesContext
 class PaymentListTest implements JsonHelper, EntityManagerFactoryHelper {
 
-    private final ExecutionContext context = DummyExecutionContext.createFrom(PaymentList.class,
-                                                                              "run", HttpRequestMessage.class,
-                                                                              ExecutionContext.class);
+    private final ExecutionContext context = SimpleExecutionContext.createFrom(PaymentList.class,
+                                                                               "run", HttpRequestMessage.class,
+                                                                               ExecutionContext.class);
 
     @Mock
     private HttpRequestMessage<Optional<String>> request;
@@ -46,9 +47,6 @@ class PaymentListTest implements JsonHelper, EntityManagerFactoryHelper {
     @Autowired
     @Getter
     private EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     private List<PaymentEvent> expectedPayments;
 
@@ -74,9 +72,8 @@ class PaymentListTest implements JsonHelper, EntityManagerFactoryHelper {
         lenient().when(request.getBody()).thenReturn(Optional.empty());
 
         val actualist = fct.run(request, context);
-        assertEquals(actualist.size(), 0);
 
-        //assertEquals(expectedPayments, actualist);
+        assertEquals(expectedPayments, actualist);
 
         System.out.println(defaultGson.toJson(actualist));
     }

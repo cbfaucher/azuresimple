@@ -14,7 +14,7 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
    * Event Hubs (Streams?!) - DONE - ALL -> TxnManager
    * Queues (MQ-like?) - DONE - TxnManager -> Approval
    * Event Grid (classic pub/sub) - DONE - TxnManager -> Execution
-   * Service Bus - TODO
+   * Service Bus - DONE -> PaymentSvc -> TxnManager
    
 ## Issues found so far
 

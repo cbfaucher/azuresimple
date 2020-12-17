@@ -3,23 +3,21 @@ package com.ms.wmbanking.azure.payment;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.HttpRequestMessage;
-import com.microsoft.azure.functions.annotation.*;
-import com.ms.wmbanking.azure.Application;
+import com.microsoft.azure.functions.annotation.AuthorizationLevel;
+import com.microsoft.azure.functions.annotation.FunctionName;
+import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.microsoft.azure.functions.annotation.ServiceBusTopicOutput;
 import com.ms.wmbanking.azure.common.model.Payment;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
+import com.ms.wmbanking.azure.common.spring.AzureFunctionSpringHook;
 import lombok.val;
-import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class PaymentInitiate extends AzureSpringBootRequestHandler<Payment, PaymentEvent> {
-
-    public PaymentInitiate() {
-        super(Application.class);
-    }
+public class PaymentInitiate extends AzureFunctionSpringHook<Payment, PaymentEvent> {
 
     /**
      * This function listens at endpoint "/api/PaymentInitiate". Two ways to invoke it using "curl" command in bash:

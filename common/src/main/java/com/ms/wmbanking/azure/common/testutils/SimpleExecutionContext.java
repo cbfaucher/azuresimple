@@ -1,4 +1,4 @@
-package com.ms.wmbanking.azure.testutils;
+package com.ms.wmbanking.azure.common.testutils;
 
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * An utility implementation for {@link ExecutionContext}
  */
-public class DummyExecutionContext implements ExecutionContext {
+public class SimpleExecutionContext implements ExecutionContext {
 
     static public ExecutionContext createFrom(final Class<?> fctClass,
                                               final String methodName,
@@ -28,7 +28,7 @@ public class DummyExecutionContext implements ExecutionContext {
         val method = fctClass.getDeclaredMethod(methodName, paramTypes);
         val fctName = method.getAnnotation(FunctionName.class).value();
 
-        return new DummyExecutionContext(invocationId, fctName);
+        return new SimpleExecutionContext(invocationId, fctName);
     }
 
     @Getter
@@ -37,7 +37,11 @@ public class DummyExecutionContext implements ExecutionContext {
     @Getter
     final private String functionName;
 
-    public DummyExecutionContext(String invocationId, String functionName) {
+    public SimpleExecutionContext(String functionName) {
+        this(UUID.randomUUID().toString(), functionName);
+    }
+
+    public SimpleExecutionContext(String invocationId, String functionName) {
         this.invocationId = invocationId;
         this.functionName = functionName;
     }

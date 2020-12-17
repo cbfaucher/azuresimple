@@ -6,10 +6,9 @@ import com.microsoft.azure.functions.HttpRequestMessage;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import com.ms.wmbanking.azure.Application;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
+import com.ms.wmbanking.azure.common.spring.AzureFunctionSpringHook;
 import lombok.val;
-import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +16,7 @@ import java.util.Optional;
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class PaymentList extends AzureSpringBootRequestHandler<String, List<PaymentEvent>> {
-
-    public PaymentList() {
-        super(Application.class);
-    }
+public class PaymentList extends AzureFunctionSpringHook<String, List<PaymentEvent>> {
 
     /**
      * This function listens at endpoint "/api/paymentList". Two ways to invoke it using "curl" command in bash:
