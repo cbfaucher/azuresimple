@@ -45,6 +45,10 @@ spring.http.converters.preferred-json-mapper=${spring.mvc.converters.preferred-j
 
 ## AZURE 
 
+### Grid, Hub, Bus, WTF?
+
+See https://docs.microsoft.com/en-us/azure/event-grid/compare-messaging-services
+
 ### Common Parameters
 * RESOURCE_GROUP=`cf-tutorial`
 * EVENT_HUB_NAMESPACE=`cftutorial`

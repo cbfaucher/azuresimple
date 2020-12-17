@@ -6,13 +6,11 @@ import com.azure.storage.queue.QueueClient;
 import com.ms.wmbanking.azure.common.entities.PaymentEntity;
 import com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
-import lombok.Getter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.json.JsonMapper;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.function.Consumer;
@@ -21,8 +19,10 @@ import java.util.stream.Stream;
 
 import static com.ms.wmbanking.azure.common.hibernate.EntityManagerFactoryHelper.now;
 
-@Component("txnmanagerUpdate")
+//  Created in TxnManagerBeans
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TxnmanagerMessageHandler implements EntityManagerFactoryHelper, Consumer<PaymentEvent> {
 
     @Autowired
@@ -67,18 +67,34 @@ public class TxnmanagerMessageHandler implements EntityManagerFactoryHelper, Con
     private void handleInitiating(PaymentEvent paymentEvent) {
 
         //  keep track of receive status
-        final PaymentEntity entity = execute(em -> {
+        final PaymentEntity initiatedEntity = execute(em -> {
+
             val e = PaymentEntity.fromModel(paymentEvent);
-            log.info(String.format("--> Saving new Payment %s to database [Status=%s]...", e.getPaymentId(), e.getStatus()));
-            em.persist(e);
-            return e;
-        }).withStatus(PaymentEvent.Status.Approving)
-          .withLastUpdated(now());
+
+            val exists = em.createQuery("SELECT COUNT(T) FROM PaymentEntity T WHERE T.paymentId=:paymentId", Long.class)
+                           .setParameter("paymentId", e.getPaymentId())
+                           .getSingleResult() > 0;
+
+            if (!exists) {
+                log.info(String.format("--> Saving new Payment %s to database [Status=%s]...", e.getPaymentId(), e.getStatus()));
+                em.persist(e);
+                return e;
+            } else {
+                log.warn(String.format("Payment %s ALREADY EXISTS!  Discarding this duplicate", e.getPaymentId()));
+                return null;
+            }
+        });
+
+        if (initiatedEntity == null) {
+            return; //duplicate
+        }
 
         //  flip to approval
+        final PaymentEntity approvingEntity = initiatedEntity.withStatus(PaymentEvent.Status.Approving)
+                                                             .withLastUpdated(now());
         execute(em -> {
-            log.info(String.format("Updating database for Payment %s with Status=%s", entity.getPaymentId(), entity.getStatus()));
-            em.merge(entity);
+            log.info(String.format("Updating database for Payment %s with Status=%s", approvingEntity.getPaymentId(), approvingEntity.getStatus()));
+            em.merge(approvingEntity);
             return null;
         });
 
@@ -88,8 +104,8 @@ public class TxnmanagerMessageHandler implements EntityManagerFactoryHelper, Con
         //  https://stackoverflow.com/questions/63023481/azure-functions-queue-trigger-is-expecting-base-64-messages-and-doesnt-process
         //  and
         //  https://github.com/Azure/azure-sdk-for-net/issues/10242#issuecomment-640862361
-        val json = jsonMapper.toString(entity.toModel());
-        log.info(String.format("Sending Payment %s for Approval...", entity.getPaymentId()));
+        val json = jsonMapper.toString(approvingEntity.toModel());
+        log.info(String.format("Sending Payment %s for Approval...", approvingEntity.getPaymentId()));
         approvalQueue.sendMessage(Base64.encodeBase64String(json.getBytes()));
     }
 
