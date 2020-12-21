@@ -1,16 +1,22 @@
 package com.ms.wmbanking.azure.txnmanager;
 
-import com.microsoft.azure.functions.annotation.*;
-import com.microsoft.azure.functions.*;
+import com.microsoft.azure.functions.ExecutionContext;
+import com.microsoft.azure.functions.annotation.FunctionName;
+import com.microsoft.azure.functions.annotation.ServiceBusTopicTrigger;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
-import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
+import com.ms.wmbanking.azure.common.spring.AzureFunctionSpringHook;
 
 import javax.sound.midi.VoiceStatus;
 
 /**
  * Azure Functions with HTTP Trigger.
  */
-public class TxnManagerInitiate extends AzureSpringBootRequestHandler<PaymentEvent, VoiceStatus> {
+public class TxnManagerInitiate extends AzureFunctionSpringHook<PaymentEvent, VoiceStatus> {
+
+    public TxnManagerInitiate() {
+        super(Application.class);
+    }
+
     /**
      * This function listens at endpoint "/api/TxnManagerInitiate". Two ways to invoke it using "curl" command in bash:
      * 1. curl -d "HTTP Body" {your host}/api/TxnManagerInitiate
