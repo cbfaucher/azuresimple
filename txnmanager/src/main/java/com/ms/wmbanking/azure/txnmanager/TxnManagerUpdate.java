@@ -5,9 +5,13 @@ import com.microsoft.azure.functions.annotation.Cardinality;
 import com.microsoft.azure.functions.annotation.EventHubTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
-import org.springframework.cloud.function.adapter.azure.AzureSpringBootRequestHandler;
+import com.ms.wmbanking.azure.common.spring.AzureFunctionSpringHook;
 
-public class TxnManagerUpdate extends AzureSpringBootRequestHandler<PaymentEvent, Void> {
+public class TxnManagerUpdate extends AzureFunctionSpringHook<PaymentEvent, Void> {
+
+    public TxnManagerUpdate() {
+        super(Application.class);
+    }
 
     @FunctionName("txnmanagerUpdate")
     public void run(@EventHubTrigger(name = "event",

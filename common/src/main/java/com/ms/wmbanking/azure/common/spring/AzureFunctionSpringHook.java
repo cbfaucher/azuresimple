@@ -2,13 +2,11 @@ package com.ms.wmbanking.azure.common.spring;
 
 import com.microsoft.azure.functions.ExecutionContext;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ApplicationContext;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -16,21 +14,29 @@ import java.util.function.Supplier;
 /**
  * Base class to use for Azure functions that require Spring.  Make sure your global {@code Application} class
  * does a {@link @Import} of {@link AzureFunctionsSpringBeans}.
- *
+ * <p>
  * Contract to use this:
  * <ul>
  *     <li>Single function method per class (comes from Spring Cloud way)</li>
  *     <li>Related bean (either by Function's name or specified name) must be either a {@link Function}, a {@link Consumer} or a {@link Supplier}</li>
  *     <li>All Functions in your FunctionApp share the same {@code Application} class</li>
  * </ul>
- *
+ * <p>
  * Supports creation from {@link @SpringBootTest} from test classes
- *
  *
  * @param <I> Request type, or use {@link Void} if none (e.g. the invoked bean is a {@link Supplier})
  * @param <O> Response type, or use {@link Void} if the invoked bean returns {@code void}.
  */
+@Slf4j
 public abstract class AzureFunctionSpringHook<I, O> {
+
+    protected AzureFunctionSpringHook() {
+        SpringContextLoader.setSpringMainClassFromSystemPropertyIfNeeded();
+    }
+
+    protected AzureFunctionSpringHook(@NonNull final Class<?> clazz) {
+        SpringContextLoader.setGlobalSpringMainClassName(clazz.getName());
+    }
 
     protected O handleRequest(@NonNull final ExecutionContext executionContext) {
         return handleRequest(null, executionContext, executionContext.getFunctionName());
@@ -44,8 +50,7 @@ public abstract class AzureFunctionSpringHook<I, O> {
                               @NonNull final String springBeanName) {
 
         //  make sure we have an ApplicationContext
-        val appContext = Optional.ofNullable(ApplicationContextSingletonBean.getApplicationContext())
-                                 .orElseGet(this::loadApplicationContext);
+        val appContext = fetchApplicationContext();
 
         try {
             //  get the bean
@@ -77,18 +82,17 @@ public abstract class AzureFunctionSpringHook<I, O> {
         }
     }
 
-    private ConfigurableApplicationContext loadApplicationContext() {
-        val springMainClassName = System.getProperty("MAIN_CLASS");
-        if (StringUtils.isBlank(springMainClassName)) {
-            throw new SpringFailureException("Spring's context main class name missing (MAIN_CLASS=...)");
+    private ApplicationContext fetchApplicationContext() {
+
+        log.info(String.format("Querying ApplicationContextSingletonBean<%s> for ApplicationContext...", ApplicationContextSingletonBean.class.hashCode()));
+
+        val appContext = ApplicationContextSingletonBean.getApplicationContext();
+        if (appContext != null) {
+            log.info(String.format("Got AppContext ID=%s.  Returning it...", appContext.getId()));
+            return appContext;
         }
 
-        try {
-            val springMainClass = Class.forName(springMainClassName);
-
-            return SpringApplication.run(springMainClass);
-        } catch (Exception e) {
-            throw new SpringFailureException(e);
-        }
+        log.info("No AppContext loaded!  Requesting a new one...");
+        return SpringContextLoader.getApplicationContext();
     }
 }

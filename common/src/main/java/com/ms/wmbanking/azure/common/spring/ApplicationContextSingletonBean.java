@@ -17,7 +17,8 @@ import java.util.Date;
 @Slf4j
 public class ApplicationContextSingletonBean implements ApplicationContextAware {
 
-    private static final Object lock = new Object();
+    //  sharing lock with SpringContextLoader
+    static final Object lock = new Object();
 
     @Getter
     private static ApplicationContext applicationContext;

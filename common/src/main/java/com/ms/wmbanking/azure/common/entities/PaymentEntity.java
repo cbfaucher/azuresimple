@@ -67,6 +67,7 @@ public class PaymentEntity {
     @Column(name = "LAST_UPDATED_DT", columnDefinition = "datetime")
     private Timestamp lastUpdated;
 
+    @Transient
     public PaymentEvent toModel() {
         return new PaymentEvent(paymentId,
                                 new Payment(amount,
