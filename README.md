@@ -16,6 +16,25 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
    * Event Grid (classic pub/sub) - DONE - TxnManager -> Execution
    * Service Bus - DONE -> PaymentSvc -> TxnManager
    
+## URLs:
+
+* *PaymentSvc/Ping*: https://cfpaymentsvc.azurewebsites.net/api/ping?name=Christian [GET, POST] 
+* *PaymentSvc/Initiate*: https://cfpaymentsvc.azurewebsites.net/api/paymentInitiate [POST]
+<pre>
+    {
+          "amount" : 12.34,
+      "from" : {
+        "ownerName" : "Mom",
+        "accountNumber" : "123456"
+      },
+      "to" : {
+        "ownerName" : "Christian",
+        "accountNumber" : "987654"
+      }
+    }
+</pre> 
+* *PaymentSvc/Fetch*: https://cfpaymentsvc.azurewebsites.net/api/paymentList [GET]     
+   
 ## Issues found so far
 
 * *Spring support is partial and misleading*.  All good when run in unit tests or through `Application` class.  However, in real world, the Function is run through a cmd line tool call `func.exe`, and this one doesn't seem to connect to JSON Mapper found in Spring, thus yielding a different JSON result when invoking the Function in real world.
@@ -27,7 +46,8 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
 * *Poor API from Spring Cloud for Azure*.  The base classes provided for Azure by Spring Cloud are poorly written: 
    * Reloads contexts for each Function
    * No way of setting properly profiles
-   * Profiles from testing not carried over 
+   * Profiles from testing not carried over
+* *Avoid having multiple Events tools (EventHub, EventGrid, ServiceBus, ...) within same FunctionApp*.  You'll quickly run into "AbstractMethodError" (and similar), because dependencies are not coherent between the various being pulled.      
 * *IntelliJ Azure plugin buggy?*  Functions work fine when run from Maven plugin (`mvn azure-functions:run`) and when deployed from Maven as well to Azure Cloud.  But getting "Entity not mapped" errors when run from Intellij plugin. 
    
 ### Quick fixes
