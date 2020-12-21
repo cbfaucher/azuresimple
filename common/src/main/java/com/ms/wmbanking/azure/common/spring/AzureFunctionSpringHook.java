@@ -16,16 +16,15 @@ import java.util.function.Supplier;
 /**
  * Base class to use for Azure functions that require Spring.  Make sure your global {@code Application} class
  * does a {@link @Import} of {@link AzureFunctionsSpringBeans}.
- *
+ * <p>
  * Contract to use this:
  * <ul>
  *     <li>Single function method per class (comes from Spring Cloud way)</li>
  *     <li>Related bean (either by Function's name or specified name) must be either a {@link Function}, a {@link Consumer} or a {@link Supplier}</li>
  *     <li>All Functions in your FunctionApp share the same {@code Application} class</li>
  * </ul>
- *
+ * <p>
  * Supports creation from {@link @SpringBootTest} from test classes
- *
  *
  * @param <I> Request type, or use {@link Void} if none (e.g. the invoked bean is a {@link Supplier})
  * @param <O> Response type, or use {@link Void} if the invoked bean returns {@code void}.
@@ -78,7 +77,9 @@ public abstract class AzureFunctionSpringHook<I, O> {
     }
 
     private ConfigurableApplicationContext loadApplicationContext() {
-        val springMainClassName = System.getProperty("MAIN_CLASS");
+        val springMainClassName = Optional.ofNullable(System.getenv("MAIN_CLASS"))
+                                          .filter(StringUtils::isNotBlank)
+                                          .orElseGet(() -> System.getProperty("MAIN_CLASS"));
         if (StringUtils.isBlank(springMainClassName)) {
             throw new SpringFailureException("Spring's context main class name missing (MAIN_CLASS=...)");
         }
