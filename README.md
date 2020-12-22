@@ -68,8 +68,26 @@ spring.http.converters.preferred-json-mapper=${spring.mvc.converters.preferred-j
 ### Grid, Hub, Bus, WTF?
 
 See https://docs.microsoft.com/en-us/azure/event-grid/compare-messaging-services
+and for Queues: https://docs.microsoft.com/en-us/azure/storage/queues/storage-java-how-to-use-queue-storage?tabs=java
+
+TL/dr:
+Microsoft defines _Events_ and _Messages_ as follow (from MS docs):
+* *Events* : 
+> An event is a lightweight notification of a condition or a state change. The publisher of the event has no expectation about how the event is handled.
+* *Messages* :
+> A message is raw data produced by a service to be consumed or stored elsewhere. The message contains the data that triggered the message pipeline. The publisher of the message has an expectation about how the consumer handles the message. A contract exists between the two sides. For example, the publisher sends a message with the raw data, and expects the consumer to create a file from that data and send a response when the work is done.
+
+Conceptually, _business content_ are *messages*, not Events.  This point is important to take into account when choosing the event/message system.
+
+| Messaging<br>Service | Msg Type           | Msg Format | Similar                  | Pros                                                                                       | Cons                                                                                                                                                     |
+|----------------------|--------------------|------------|--------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Queues               | Messages or Events | Any        | MQ's Queues with a twist | Easy to create/manage<br>Easy to use<br>Sequential in nature<br>High volume (batches)      | Not exactly a "MQ Queue"                                                                                                                                 |
+| Event Grids          | Events             | Specifics  |                          | High volume                                                                                | Fairly complex setup<br>Mean for _Events_ (not _messages_)<br>Could not get it to receive msgs locally (requires subscriptions to a _deployed_ Function) |
+| Event Hubs           | Events             | Any        | Kafka topics-ish         | High volume<br>Front to pipelines                                                          | Not exactly a Kafka Topic either<br>Meant for events, not _messages_                                                                                     |
+| Service Bus          | Messages           | Any        | Kafka Topics/MQ Queues   | High volume<br>Messaging frontend to business services<br>Queues (n-1) or Topics (pub/sub) |                                                                                                                                                          |
 
 ### Common Parameters
+
 * RESOURCE_GROUP=`cf-tutorial`
 * EVENT_HUB_NAMESPACE=`cftutorial`
 * EVENT_HUB_NAME=`myhub`
