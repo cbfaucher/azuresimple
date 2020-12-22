@@ -3,14 +3,14 @@
 Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-java?tabs=bash%2Cconsumption
 
 * (_DONE_) Use GSON instead of Jackson --> Works natively with func.exe for Functions return values.
-* See how to use Spring locally only to run and debug the Function code
-* JSR-303 Validation?
+* (_DONE_) See how to use Spring locally only to run and debug the Function code --> Use unit/integration tests
+* (_DONE_) JSR-303 Validation? --> See issue below
 * Avoid the ``HttpRequestMessage``, and use type directly?
 * Security: Authentication and Authorization
-* <strike>Multi module with Maven and Functions</strike>
-* <strike>What is the Azure JSON mapper and how to configure it</strike>   -->  USE GOOGLE GSON!
+* (_DONE_) <strike>Multi module with Maven and Functions</strike>
+* (_DONE_) <strike>What is the Azure JSON mapper and how to configure it</strike>   -->  USE GOOGLE GSON!
 * Continuous deployments
-* Azure Events:
+* (_DONE_) Azure Events:
    * Event Hubs (Streams?!) - DONE - ALL -> TxnManager
    * Queues (MQ-like?) - DONE - TxnManager -> Approval
    * Event Grid (classic pub/sub) - DONE - TxnManager -> Execution
@@ -47,6 +47,10 @@ Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions
    * Reloads contexts for each Function
    * No way of setting properly profiles
    * Profiles from testing not carried over
+* *Java API libraries have conflicts in third-party versions*: Azure has extra libraries you can pull in to use _programmatic_ API to send/receive messages to Events Hubs/Grids, Queues.  Unfortunately, it seems their development is not well integrated, and I ended up with multiple version clashes, preventing running my sample Functions properly.    
+* *JSR-303* (or HTTP validation in general): Found now way of having _automatic_ JSR-303 validation on HTTP Trigger, or any type of validation for that matter.  Validation can be made inline code, but it adds boilerplate that would be otherwise done by HTTP layer (in Spring Rest or CXF).
+* *Security/Authentication/Authorization*: Done through the Azure portal, not within App.  Which can be a good and a bad thing, moving that layer to infrastructure, and out of code.
+* *The PaymentSvc FuncationApp seems to fall into an unusable state overnight*.  I have to bounce it every morning to get back on its feet.   
 * *Avoid having multiple Events tools (EventHub, EventGrid, ServiceBus, ...) within same FunctionApp*.  You'll quickly run into "AbstractMethodError" (and similar), because dependencies are not coherent between the various being pulled.      
 * *IntelliJ Azure plugin buggy?*  Functions work fine when run from Maven plugin (`mvn azure-functions:run`) and when deployed from Maven as well to Azure Cloud.  But getting "Entity not mapped" errors when run from Intellij plugin. 
    
