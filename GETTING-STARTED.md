@@ -7,3 +7,5 @@
  * Next you will want to install the Azure CLI and Functions CLI
    * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)
    * [Functions CLI](https://aka.ms/azfunc-install)
+ * You will also want to have the [.Net SDK](https://dotnet.microsoft.com/download) installed
+ * For dependency management you will want a local installation of [Maven](https://maven.apache.org/download.cgi)
