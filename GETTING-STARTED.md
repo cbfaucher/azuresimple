@@ -91,3 +91,50 @@
       * `myservername` is the name of the SQL server we created
       * `payments` is the name of the DB we created
  * In the connection string you will want to update the `<username>` and `<password>` values with those that you saved earlier. Save this connection string for later use.
+
+### Event Hub
+ * Now we create the eventhub (We're almost done with the infra)
+ * First we create the namespace
+
+   ```shell
+   az eventhubs namespace create --resource-group MyResourceGroup --name mynamespace --location eastus
+   ```
+   * Adjust the values as needed
+     * `MyResourceGroup` is the name of the resource group
+     * `mynamespace` is the name of the namespace we are creating, must be unique
+     * `eastus` is the location of the namespace
+ * To verify the namespace was created we can run
+
+   ```shell
+   az eventhubs namespace list
+   ```
+ * Now we create the event hub
+
+   ```shell
+   az eventhubs eventhub create --resource-group "MyResourceGroup" --name "newpayment" --namespace-name "mynamespace" --message-retention 1
+   ```
+   * Adjust the values as needed
+     * `MyResourceGroup` is the name of the resource group
+     * `newpayment` is the name of the event hub (use the given name for the sample to work)
+     * `mynamespace` is the name of the namespace we are creating, must be unique
+ * To verify the event hub was created
+
+   ```shell
+   az eventhubs eventhub list --namespace mynamespace --resource-group "MyResourceGroup"
+   ```
+ * Next we need an authorization rule
+
+   ```shell
+   az eventhubs eventhub authorization-rule create --resource-group "MyResourceGroup" --name "my-eventhub-auth" --eventhub-name "newpayment" --namespace-name "mynamespace" --rights Listen Send
+   ```
+   * Adjust the values as needed
+     * `MyResourceGroup` is the name of the resource group
+     * `my-eventhub-auth` is the name of the auth key we are creating  
+     * `newpayment` is the name of the event hub
+     * `mynamespace` is the name of the namespace
+ * To get your Event Hub connection string
+
+   ```shell
+   az eventhubs eventhub authorization-rule keys list --resource-group "MyResourceGroup" --name "my-eventhub-auth" --eventhub-name "newpayment" --namespace-name "mynamespace" --query primaryConnectionString --output tsv
+   ```
+ * In the connection string, remove the part at then end which says `EntityPath=newpayment`. Save this connection string for later use.
