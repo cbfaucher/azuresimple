@@ -1,3 +1,13 @@
+# Azure POCs, Notes and Findings 
+
+----
+
+<p align="center">
+<strong><a href="GETTING-STARTED.md">Getting Started</a></strong>
+</p>
+
+----
+
 ## Proof of concept
 
 Java and Azure Functions: https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-java?tabs=bash%2Cconsumption
