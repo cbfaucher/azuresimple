@@ -138,3 +138,34 @@
    az eventhubs eventhub authorization-rule keys list --resource-group "MyResourceGroup" --name "my-eventhub-auth" --eventhub-name "newpayment" --namespace-name "mynamespace" --query primaryConnectionString --output tsv
    ```
  * In the connection string, remove the part at then end which says `EntityPath=newpayment`. Save this connection string for later use.
+
+### Update Config
+ * We're finally done with infra :balloon: Now on to updating the config. We're going to update the config for the payment service, but the same process applies to the other modules.
+ * Open the `pom.xml` in the payment module
+   * Find the properties `functionResourceGroup`, `functionAppName` and `functionAppRegion` and update them with the appropriate values
+     * `functionResourceGroup` is the name of our resource group (what we previously called `MyResourceGroup`)
+     * `functionAppName` is the name of the new function app, needs to be unique  (ex. arpaymentsvc)
+     * `functionAppRegion` is the region the app will run in (ex. eastus)
+ * Open the root `pom.xml`
+     * Find the property `url` update it to `https://functionAppName.azurewebsites.net` (ex. https://arpaymentsvc.azurewebsites.net)
+ * Under `payments/src/main/resources` create a properties file with the name `application-username.properties` where `username` is your windows username
+     * Create and fill in the values for the following properties 
+       * `spring.datasource.url` to the SQL connection string we saved before
+       * `spring.datasource.username` to the SQL connection username we saved before
+       * `spring.datasource.password` to the SQL connection password we saved before
+
+### Compile and Run
+ * To compile and package the project run `mvn clean package` (this uses your local maven installation)
+ * Once the application is built, you can run it locally using the Azure Function Maven plug-in
+   
+   ```
+   cd payment
+   mvn azure-functions:run
+   ```
+ * Once the startup completes it should print out your local urls. You can try to hit the endpoint to ensure they work. (ex. `http://localhost:7071/api/ping?name=Alex`)
+ * To stop the function you can use <kbd>CTRL</kbd> + <kbd>C</kbd>, then confirm at the prompt
+
+### Deploy to Azure
+ * To deploy the project to Azure, `mvn azure-functions:deploy`
+ * The first time you d this it will create the App which can be a little slow. On future invocations it updates the existing app.
+ * nce complete it should print out your urls which yuo can then invoke t test the function (ex. `https://arpaymentsvc.azurewebsites.net/api/ping?name=Alex`)
