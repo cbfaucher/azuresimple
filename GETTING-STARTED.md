@@ -153,12 +153,26 @@
        * `spring.datasource.url` to the SQL connection string we saved before
        * `spring.datasource.username` to the SQL connection username we saved before
        * `spring.datasource.password` to the SQL connection password we saved before
+ * Under `payments/src/main/azure` create a file called `local.setting.json`
+   * Put the following into the file:
+    
+   ```json
+    {
+        "IsEncrypted": false,
+        "Values": {
+            "MAIN_CLASS": "com.ms.wmbanking.azure.Application",
+            "FUNCTIONS_WORKER_RUNTIME": "java",
+            "IsEncrypted": "false",
+            "spring.profiles.active": "${user.name}"
+        }
+    }
+    ```
 
 ### Compile and Run
  * To compile and package the project run `mvn clean package` (this uses your local maven installation)
  * Once the application is built, you can run it locally using the Azure Function Maven plug-in
    
-   ```
+   ```shell
    cd payment
    mvn azure-functions:run
    ```
