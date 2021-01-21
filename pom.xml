@@ -35,6 +35,7 @@
         <module>txnmanager</module>
         <module>approval</module>
         <module>execution</module>
+        <module>cosmosdb</module>
     </modules>
 
     <dependencies>
