@@ -1,0 +1,6 @@
+spring:
+  main:
+    web-application-type: none
+  data:
+    mongodb:
+      uri: "mongodb://accounts:Ad7jjgKnuiQXOk7P8I3v9L0FErcJVcVtBkYqPpPO5YheIQYVvgFLIzGAPfgIssJs9pHthI0rYNUgP6QYGN3Sxg==@accounts.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@accounts@&retrywrites=false"
