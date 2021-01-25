@@ -1,4 +1,4 @@
-package com.ms.wmbanking.azure.testutils;
+package com.ms.wmbanking.azure.common.testutils;
 
 import com.microsoft.azure.functions.*;
 import lombok.*;

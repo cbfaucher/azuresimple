@@ -1,7 +1,7 @@
 package com.ms.wmbanking.azure;
 
 import com.ms.wmbanking.azure.common.testutils.SimpleExecutionContext;
-import com.ms.wmbanking.azure.testutils.SimpleHttpRequestMessage;
+import com.ms.wmbanking.azure.common.testutils.SimpleHttpRequestMessage;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.Test;

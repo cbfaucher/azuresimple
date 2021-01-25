@@ -10,6 +10,12 @@
 
     <name>cosmosdb</name>
 
+    <parent>
+        <groupId>com.ms.wmbanking</groupId>
+        <artifactId>azure-simple</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -21,15 +27,9 @@
         <functionAppRegion>eastus</functionAppRegion>
 
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
-        <start-class>com.ms.wmbanking.azure.txnmanager.Application</start-class>
+        <start-class>com.ms.azure.cosmosdb.Application</start-class>
         <spring.boot.wrapper.version>1.0.25.RELEASE</spring.boot.wrapper.version>
     </properties>
-
-    <parent>
-        <groupId>com.ms.wmbanking</groupId>
-        <artifactId>azure-simple</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
 
     <dependencies>
         <dependency>
@@ -40,12 +40,9 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-function-adapter-azure</artifactId>
@@ -61,22 +58,6 @@
             <artifactId>spring-cloud-starter-function-web</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Azure -->
-<!--
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-storage-queue</artifactId>
-        </dependency>
--->
-
-        <!-- SQL DB -->
-<!--
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>
--->
 
         <!-- Test -->
         <dependency>
