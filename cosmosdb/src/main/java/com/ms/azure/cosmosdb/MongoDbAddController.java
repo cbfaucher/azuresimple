@@ -15,7 +15,7 @@ public class MongoDbAddController extends AzureFunctionSpringHook<AccountUpdate,
         super(Application.class);
     }
 
-    @FunctionName("mongoAccountUpdateAdd")
+    //@FunctionName("mongoAccountUpdateAdd")
     public void add(@HttpTrigger(name = "add",
                                  methods = HttpMethod.POST,
                                  authLevel = AuthorizationLevel.ANONYMOUS) final HttpRequestMessage<AccountUpdate> request,
