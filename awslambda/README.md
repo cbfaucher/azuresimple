@@ -43,6 +43,14 @@ If previous command is successful, you should see your new Lambda on AWS Console
 
 Refer to AWS documentation for the ``aws`` utility magic.
 
+### Set the VPC
+
+*WARNING*: This assumes you already have a VPC defined for your region!  If not, follow Amazon AWS tutorial to create one.
+
+* Go to  [AWS Management Console](https://us-east-2.console.aws.amazon.com/console/home?region=us-east-2), and find your Function
+* Under ``Configuration`` tab, find the ``VPC`` menu.
+* If no VPC defined, click ``Edit`` button.  Select the *VPC*, *Subnets* and *Security Group* you want, and click ``Save`` button. 
+
 ### Add a Trigger
 
 * Go to  [AWS Management Console](https://us-east-2.console.aws.amazon.com/console/home?region=us-east-2), and find your Function
@@ -54,11 +62,6 @@ Refer to AWS documentation for the ``aws`` utility magic.
    * ``Security``, select **Open** for now
    * In ``API Name``, give it a valid name, such as the function of your lambda, e.g. "Payment Add"
    * Click ``Add`` button at bottom
-* In next step, select your newly created API.  You will see it has ``ANY`` as supported method.  I did not find a way to change that...  So we gonna add a new method:
-   * In ``Actions`` dropdown, select **Create Method**
-   * In dropdown that just appeared, select **POST** (or whatever HTTP Method you want), and click that checkmark button, just to the right of it.
-   * On the right, select **Lambda Function** as ``Integration Type``
-   * _Optionally_, update the Region
-   * For ``Lambda Function``, set your Function's name.  HINT: This is the name of your function, as it appears in AWS Console.
-   * Click ``Save`` button   
-   * Click the ``ANY`` method, and select **Delete Method** from ``Actions`` dropdown.
+
+From trigger you can test your lambda.     
+   
