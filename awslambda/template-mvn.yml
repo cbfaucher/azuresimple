@@ -5,7 +5,7 @@ Resources:
   function:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: target/awslambda-1.0-SNAPSHOT.jar
+      CodeUri: target/awslambda-1.0-SNAPSHOT-shaded.jar
       Handler: com.ms.wmbanking.aws.PaymentHandler
       Runtime: java8
       Description: Java function
@@ -18,3 +18,6 @@ Resources:
         - AWSXrayWriteOnlyAccess
         - AWSLambdaVPCAccessExecutionRole
       Tracing: Active
+      Environment:
+        Variables:
+          JAVA_TOOL_OPTIONS: "-Dspring.profiles.active=azure-dev -Dmongo.password=???"

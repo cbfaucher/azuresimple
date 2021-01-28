@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AWS Lambda as Spring Boot App [LOCAL]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="awslambda" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.ms.wmbanking.aws.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.ms.wmbanking.aws.Application" />
+    <option name="ACTIVE_PROFILES" value="local" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

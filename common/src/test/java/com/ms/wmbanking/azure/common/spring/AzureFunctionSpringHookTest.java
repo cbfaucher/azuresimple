@@ -97,7 +97,7 @@ class AzureFunctionSpringHookTest extends AzureFunctionSpringHook<String, Intege
         assertThrows(SpringFailureException.class, () -> handleRequest("data", context));
     }
 
-    @Import(AzureFunctionsSpringBeans.class)
+    @Import(ServerlessSpringBeans.class)
     static public class HookApplication {
 
         @Bean

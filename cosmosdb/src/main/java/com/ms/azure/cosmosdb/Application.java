@@ -2,7 +2,7 @@ package com.ms.azure.cosmosdb;
 
 import com.google.gson.GsonBuilder;
 import com.ms.wmbanking.azure.common.jackson.JsonHelper;
-import com.ms.wmbanking.azure.common.spring.AzureFunctionsSpringBeans;
+import com.ms.wmbanking.azure.common.spring.ServerlessSpringBeans;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -20,7 +20,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @Configuration
 @EnableMongoRepositories
-@Import({CosmosBeans.class, AzureFunctionsSpringBeans.class})
+@Import({CosmosBeans.class, ServerlessSpringBeans.class})
 @Slf4j
 public class Application implements ApplicationListener<ContextRefreshedEvent>, JsonHelper {
 

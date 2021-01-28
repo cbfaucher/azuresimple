@@ -1,0 +1,6 @@
+spring:
+  main:
+    web-application-type: none
+  data:
+    mongodb:
+      uri: "mongodb://cbfaucher:${mongo.password}@docdb-2021-01-27-17-45-33.cmtj9wq6yenl.us-east-1.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false"
