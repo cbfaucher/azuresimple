@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
  * @see AzureFunctionSpringHook
  */
 @Configuration
-public class AzureFunctionsSpringBeans {
+public class ServerlessSpringBeans {
 
     @Bean
-    public ApplicationContextSingletonBean azureFunctionSpringHook() {
+    public ApplicationContextSingletonBean serverlessApplicationContextHolder() {
         return new ApplicationContextSingletonBean();
     }
 }

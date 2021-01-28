@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+#set -eo pipefail
 ARTIFACT_BUCKET=$(cat bucket-name.txt)
 TEMPLATE=template-mvn.yml
 

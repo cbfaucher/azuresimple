@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.ms.wmbanking.azure.common.entities.PaymentEntity;
 import com.ms.wmbanking.azure.common.jackson.JsonHelper;
 import com.ms.wmbanking.azure.common.model.Response;
-import com.ms.wmbanking.azure.common.spring.AzureFunctionsSpringBeans;
+import com.ms.wmbanking.azure.common.spring.ServerlessSpringBeans;
 import com.ms.wmbanking.azure.payment.PaymentBeans;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @SpringBootApplication
 @Configuration
-@Import({PaymentBeans.class, PaymentEntity.class, AzureFunctionsSpringBeans.class})
+@Import({PaymentBeans.class, PaymentEntity.class, ServerlessSpringBeans.class})
 @EntityScan(basePackageClasses = PaymentEntity.class)
 @EnableTransactionManagement
 @Slf4j

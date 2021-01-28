@@ -1,11 +1,9 @@
 package com.ms.wmbanking.azure.common.spring;
 
 import com.microsoft.azure.functions.ExecutionContext;
+import com.ms.wmbanking.azure.common.logging.Slf4j2JavaUtilLoggingfBridge;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -13,7 +11,7 @@ import java.util.function.Supplier;
 
 /**
  * Base class to use for Azure functions that require Spring.  Make sure your global {@code Application} class
- * does a {@link @Import} of {@link AzureFunctionsSpringBeans}.
+ * does a {@link @Import} of {@link ServerlessSpringBeans}.
  * <p>
  * Contract to use this:
  * <ul>
@@ -28,14 +26,15 @@ import java.util.function.Supplier;
  * @param <O> Response type, or use {@link Void} if the invoked bean returns {@code void}.
  */
 @Slf4j
-public abstract class AzureFunctionSpringHook<I, O> {
+public abstract class AzureFunctionSpringHook<I, O> extends ServerlessSpringHook<I, O> {
 
     protected AzureFunctionSpringHook() {
-        SpringContextLoader.setSpringMainClassFromSystemPropertyIfNeeded();
+        super();
+
     }
 
     protected AzureFunctionSpringHook(@NonNull final Class<?> clazz) {
-        SpringContextLoader.setGlobalSpringMainClassName(clazz.getName());
+        super(clazz);
     }
 
     protected O handleRequest(@NonNull final ExecutionContext executionContext) {
@@ -46,53 +45,13 @@ public abstract class AzureFunctionSpringHook<I, O> {
         return handleRequest(request, executionContext, executionContext.getFunctionName());
     }
 
-    protected O handleRequest(final I request, @NonNull final ExecutionContext executionContext,
+    protected O handleRequest(final I request,
+                              @NonNull final ExecutionContext executionContext,
                               @NonNull final String springBeanName) {
 
-        //  make sure we have an ApplicationContext
-        val appContext = fetchApplicationContext();
-
-        try {
-            //  get the bean
-            executionContext.getLogger().info("Looking for Spring Bean: " + springBeanName);
-            val object = appContext.getBean(springBeanName);
-
-            //  execute
-            if (object instanceof Function) {
-                executionContext.getLogger().info("Bean is a java.util.Function.  Invoking it...");
-                return (O) ((Function) object).apply(request);
-            }
-
-            if (object instanceof Supplier) {
-                executionContext.getLogger().info("Bean is a java.util.Supplier.  Invoking it...");
-                return (O) ((Supplier) object).get();
-            }
-
-            if (object instanceof Consumer) {
-                executionContext.getLogger().info("Bean is a java.util.Consumer.  Invoking it...");
-                ((Consumer) object).accept(request);
-                return null;
-            }
-
-            throw new SpringFailureException(String.format("Bean <%s> is not a supported type (Function, Supplier, Consumer).  It is a %s",
-                                                           springBeanName,
-                                                           object.getClass().getName()));
-        } catch (BeansException | ClassCastException e) {
-            throw new SpringFailureException(e);
-        }
+        return super.handleRequest(request,
+                                   new Slf4j2JavaUtilLoggingfBridge(executionContext.getLogger()),
+                                   executionContext.getFunctionName());
     }
 
-    private ApplicationContext fetchApplicationContext() {
-
-        log.info(String.format("Querying ApplicationContextSingletonBean<%s> for ApplicationContext...", ApplicationContextSingletonBean.class.hashCode()));
-
-        val appContext = ApplicationContextSingletonBean.getApplicationContext();
-        if (appContext != null) {
-            log.info(String.format("Got AppContext ID=%s.  Returning it...", appContext.getId()));
-            return appContext;
-        }
-
-        log.info("No AppContext loaded!  Requesting a new one...");
-        return SpringContextLoader.getApplicationContext();
-    }
 }
