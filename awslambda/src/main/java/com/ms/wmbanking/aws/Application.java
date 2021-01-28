@@ -25,6 +25,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -107,5 +109,11 @@ public class Application implements ApplicationListener<ContextRefreshedEvent> {
 
             return event;
         };
+    }
+
+    @Bean
+    @Autowired
+    public Supplier<List<PaymentEvent>> listPayments(final MongoCollection<PaymentEvent> collection) {
+        return () -> collection.find(PaymentEvent.class).into(new ArrayList<>());
     }
 }

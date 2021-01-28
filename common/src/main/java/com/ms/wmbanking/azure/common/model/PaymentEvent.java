@@ -6,21 +6,23 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @With
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 public class PaymentEvent {
 
     public enum Status { Initiating, Approving, Approved, Executing, Executed };
 
-    final private String paymentId;
+    private String paymentId;
 
-    final private Payment payment;
+    private Payment payment;
 
-    final private Status status;
+    private Status status;
 
     @JsonAdapter(LocalDateTimeSerializer.class)
-    final private LocalDateTime entryTimestamp;
+    private LocalDateTime entryTimestamp;
 }
