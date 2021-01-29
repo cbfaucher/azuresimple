@@ -2,6 +2,22 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: AWS Lambda Sandbox
 Resources:
+  helloWorld:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/awslambda-1.0-SNAPSHOT-shaded.jar
+      Handler: com.ms.wmbanking.aws.HelloWorldHandler
+      Runtime: java8
+      Description: Java function
+      MemorySize: 512
+      Timeout: 10
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+      Tracing: Active
   addPayment:
     Type: AWS::Serverless::Function
     Properties:
