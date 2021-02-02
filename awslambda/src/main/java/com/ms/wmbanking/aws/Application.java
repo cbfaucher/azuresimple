@@ -1,7 +1,6 @@
 package com.ms.wmbanking.aws;
 
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
+import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
@@ -13,10 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+//import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,15 +33,10 @@ import java.util.function.Supplier;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @Configuration
 @Import({ServerlessSpringBeans.class, PaymentController.class})
 @Slf4j
 public class Application implements ApplicationListener<ContextRefreshedEvent> {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
 
     @Autowired
     private Environment environment;
@@ -54,15 +48,20 @@ public class Application implements ApplicationListener<ContextRefreshedEvent> {
 
     @Bean
     @Autowired
-    MongoDatabase mongoDatabase(final MongoClient mongoClient, final MongoProperties properties) {
-        return mongoClient.getDatabase(properties.getDatabase());
+    MongoDatabase mongoDatabase(final MongoClient mongoClient) {
+        val dbUrl = System.getProperty("mongodb.url");
+        if (dbUrl == null) {
+            throw new IllegalArgumentException("Missing property: 'mongodb.url'");
+        }
+//        return mongoClient.getDatabase(properties.getDatabase());
+        return mongoClient.getDatabase(dbUrl);
     }
 
     @Bean
     @Autowired
     public MongoCollection<PaymentEvent> mongoCollection(final MongoDatabase mongoDatabase) {
 
-        val pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+        val pojoCodecRegistry = fromRegistries(mongoDatabase.getCodecRegistry(),
                                                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
         val collection = mongoDatabase.getCollection("AccountsCollection", PaymentEvent.class)

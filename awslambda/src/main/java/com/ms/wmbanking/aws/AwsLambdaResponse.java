@@ -1,7 +1,6 @@
 package com.ms.wmbanking.aws;
 
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,10 +13,7 @@ import java.util.Map;
 public class AwsLambdaResponse {
     private boolean isBase64Encoded = false;
 
-    /**
-     * @see HttpStatus
-     */
-    private int statusCode = HttpStatus.OK.value();
+    private int statusCode = 200;
 
     private Map<String, String> headers = new HashMap<>();
 

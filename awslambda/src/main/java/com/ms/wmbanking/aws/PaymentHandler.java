@@ -7,8 +7,6 @@ import com.ms.wmbanking.azure.common.model.PaymentEvent;
 import com.ms.wmbanking.azure.common.spring.ServerlessSpringHook;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 
 @Slf4j
 public class PaymentHandler extends ServerlessSpringHook<Payment, PaymentEvent> implements RequestHandler<Payment, AwsLambdaResponse> {
@@ -30,6 +28,6 @@ public class PaymentHandler extends ServerlessSpringHook<Payment, PaymentEvent> 
         context.getLogger().log(String.format("Payment ID=%s processed successfully.  Returning Lambda's response...", event.getPaymentId()));
 
         return new AwsLambdaResponse().withBody(event)
-                                      .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                                      .withHeader("Content-Type", "application/json");
     }
 }

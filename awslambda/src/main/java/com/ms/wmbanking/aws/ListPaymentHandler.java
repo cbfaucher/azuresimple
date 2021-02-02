@@ -5,8 +5,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.ms.wmbanking.azure.common.model.PaymentEvent;
 import com.ms.wmbanking.azure.common.spring.ServerlessSpringHook;
 import lombok.val;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +29,6 @@ public class ListPaymentHandler extends ServerlessSpringHook<String, List<Paymen
                                                   .collect(Collectors.joining("\n")));
 
         return new AwsLambdaResponse().withBody(list)
-                                      .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                                      .withHeader("Content-Type", "application/json");
     }
 }
