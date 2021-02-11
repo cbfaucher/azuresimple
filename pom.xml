@@ -25,6 +25,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <spring.boot.wrapper.version>1.0.25.RELEASE</spring.boot.wrapper.version>
+
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <spring-cloud-function-dependencies-version>3.0.12.RELEASE</spring-cloud-function-dependencies-version>
     </properties>
@@ -37,6 +39,10 @@
         <module>execution</module>
         <module>cosmosdb</module>
         <module>awslambda</module>
+
+        <!-- Next for are for Spring-as-Cloud-Agnostic demo -->
+        <module>payment-business-logic</module>
+        <module>payment-spring-boot</module>
     </modules>
 
     <dependencies>

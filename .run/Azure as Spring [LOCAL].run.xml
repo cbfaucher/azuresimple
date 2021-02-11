@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Azure as Spring [LOCAL]" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="payment-spring-boot" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.ms.wmbanking.mixedapp.spring.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.ms.wmbanking.mixedapp.spring.Application" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
