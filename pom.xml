@@ -41,6 +41,7 @@
         <!-- Next for are for Spring-as-Cloud-Agnostic demo -->
         <module>payment-business-logic</module>
         <module>payment-spring-boot</module>
+        <module>payment-azure-fct</module>
     </modules>
 
     <dependencies>
