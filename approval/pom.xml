@@ -23,7 +23,6 @@
 
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
         <start-class>com.ms.wmbanking.azure.txnmanager.Application</start-class>
-        <spring.boot.wrapper.version>1.0.25.RELEASE</spring.boot.wrapper.version>
     </properties>
 
     <parent>
